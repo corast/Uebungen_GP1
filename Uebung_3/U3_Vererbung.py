@@ -1,7 +1,7 @@
 import math 
 
 class Figur: 
-     def __init__(self,name): 
+     def __init__(self, name): 
         self.name = name 
  
      def umfang(self): 
@@ -9,73 +9,95 @@ class Figur:
  
      def __str__(self): 
         return self.name
-   
+
+# -------------------------------------------------------------
+
 class Punkt(Figur):
      def __init__(self, x, y):
         super().__init__("Punkt")
         self.x = x
         self.y = y
      
+     def distanz(self, other):
+         return math.sqrt(((self.x-other.x)**2)+((self.y-other.y)**2))
+         
+
      def __str__(self):
         return f"Punkt({self.x},{self.y})"
-    
+
+# -------------------------------------------------------------   
+ 
 class Dreieck(Figur): 
-     def __init__(self, p1, p2, p3):
+     def __init__(self, A, B, C):
           super().__init__("Dreieck") 
-          self.p1 = p1
-          self.p2 = p2
-          self.p3 = p3
+          self.A = A
+          self.B = B
+          self.C = C
      
      def umfang(self):
-          a = ((self.p3.x-self.p1.x)**2+(self.p3.y-self.p1.y)**2)**(1/2)
-          b = ((self.p3.x-self.p2.x)**2+(self.p3.y-self.p2.y)**2)**(1/2)
-          c = ((self.p2.x-self.p1.x)**2+(self.p2.y-self.p1.y)**2)**(1/2)
-          return a+b+c
+          return self.A.distanz(self.B) + self.B.distanz(self.C) + self.C.distanz(self.A)
 
      def __str__(self):
-          return f"Dreieck P1={self.p1.x, self.p1.y}, P2={self.p2, self.p2.y}, P3={self.p3.x, self.p3.y}"
-             
-#class Rechteck(Figur):
-     def __init__(self, p1):
-          super().__init__("Rechteck")
-
-
-
+          return f"Dreieck {self.A}, {self.B}, {self.C}"
+     
+# -------------------------------------------------------------
 
 class Kreis(Figur):
-     def __init__(self, mittelpunkt, radius):
+     def __init__(self, M, r):
           super().__init__("Kreis")
-          self.mittelpunkt = mittelpunkt
-          self.radius = radius
+          self.M = M
+          self.r = r
      
      def umfang(self):
-         return self.radius * math.pi * 2
+         return self.r * math.pi * 2
 
      def __str__(self):
-          return f"Kreis M={self.mittelpunkt} r={self.radius}"
+          return f"Kreis M={self.M} r={self.r}"
+
+# -------------------------------------------------------------
+
+class Rechteck(Figur):
+     def __init__(self, Pmin, Pmax):
+          super().__init__("Rechteck")
+          self.Pmin = Pmin
+          self.Pmax = Pmax
+     
+     def umfang(self):
+         return (abs(self.Pmax.x - self.Pmin.x))*2 + (abs(self.Pmax.y - self.Pmin.y))*2
+
+     def __str__(self):
+          return f"Rechteck: {self.Pmin}, {self.Pmax}"
+     
+# -------------------------------------------------------------
 
 class Polygon(Figur):
-     def __init__(self):
+     def __init__(self, Punktliste):
           super().__init__("Polygon")
+          self.pl = Punktliste
+     
+     def umfang(self):
+          s = 0
+          for i in range(0, len(self.pl)-1):
+             l1 = self.pl[i]
+             l2 = self.pl[i+1]
+             s = s + l1.distanz(l2)
+          return s
      
      def __str__(self):
-          return f"Polygon "
+          s = f"Polygon: "
+          for punkt in self.pl:
+              s = s + f"{punkt} "
+          return s
      
-
-#d1 = Punkt(1,1)
-#d2 = Punkt(2,2)
-#d3 = Punkt(2,1)
-#D1 = Dreieck(Punkt(1.4,1.4), Punkt(2.5,2.5), Punkt (3.1,3.1))
-#print(D1)
 
 d1 = Punkt(1,1)
 d2 = Punkt(2,2)
-d3 = Punkt(3,3)
+d3 = Punkt(2,1)
+D1 = Dreieck(d1,d2,d3)
+print(D1.umfang())
+print(D1)
 
-#Dr = (d1, d2, d3)
-print(d1.x)
-print(d2)
-print(d3)
+polygonliste = [Punkt(1,1), Punkt(2,4), Punkt(3,3.5), Punkt(4,4), Punkt(4,1), Punkt(1,1)]
 
-#
-# print(Dr)
+p = Polygon(polygonliste)
+print(p)
