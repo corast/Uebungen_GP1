@@ -13,28 +13,28 @@ class MyWindow(QMainWindow):
         
         # GUI-Elemnente erstellen 
 
-        vorname = QLineEdit()
-        name = QLineEdit()
-        geburtstag = QDateEdit()
-        adresse = QLineEdit()
-        plz = QLineEdit()
-        ort = QLineEdit()
-        land = QComboBox()
-        land.addItems(["Schweiz", "Deutschland", "Österreich"])
-        button = QPushButton("Save")
+        self.vorname = QLineEdit()
+        self.name = QLineEdit()
+        self.geburtstag = QDateEdit()
+        self.adresse = QLineEdit()
+        self.plz = QLineEdit()
+        self.ort = QLineEdit()
+        self.land = QComboBox()
+        self.land.addItems(["Schweiz", "Deutschland", "Österreich"])
+        self.button = QPushButton("Save")
 
         # GUI-Elemente dem Layout hinzufügen
-        layout.addRow("Vorname", vorname)
-        layout.addRow("Name", name)
-        layout.addRow("Geburtstag", geburtstag)
-        layout.addRow("Adresse", adresse)
-        layout.addRow("PLZ", plz)
-        layout.addRow("Ort", ort)
-        layout.addRow("Land", land)
-        layout.addRow(button)
+        layout.addRow("Vorname:", self.vorname)
+        layout.addRow("Name:", self.name)
+        layout.addRow("Geburtstag:", self.geburtstag)
+        layout.addRow("Adresse:", self.adresse)
+        layout.addRow("Postleitzahl:", self.plz)
+        layout.addRow("Ort:", self.ort)
+        layout.addRow("Land:", self.land)
+        layout.addRow(self.button)
 
         # Klick auf Button "Save"
-        button.clicked.connect(self.speichern)
+        self.button.clicked.connect(self.speichern)
 
         # Menubar
         menubar = self.menuBar()
@@ -60,13 +60,18 @@ class MyWindow(QMainWindow):
         # Fenster anzeigen
         self.show()
 
-        text = f"({vorname}, {name}, {geburtstag}, {adresse}, {plz}, {ort}, {land})"
-
 
     def speichern(self):
-        file = open("output.txt", "a")
-        #text = f"({vorname}, {name}, {geburtstag}, {adresse}, {plz}, {ort}, {land})"
-        file.write("Test")
+        file = open("output.txt", "w", encoding="utf-8")
+        v = self.vorname.text()
+        n = self.name.text()
+        g = self.geburtstag.text()
+        a = self.adresse.text()
+        p = self.plz.text()
+        o = self.ort.text()
+        l = self.land.currentText()
+        txt = f"{v}, {n}, {g}, {a}, {p}, {o}, {l}"
+        file.write(txt + "\n")
         file.close
     
 def main():
